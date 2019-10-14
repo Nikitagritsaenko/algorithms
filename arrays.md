@@ -1,3 +1,72 @@
+# Two Sum
+https://leetcode.com/problems/two-sum/solution/
+
+Есть целевое значение `target` и входной массив `nums`. Нужно в массиве найти 2 индекса, которые соответствуют 2 числам массива, сумма которых равна `target`
+
+### Решение
+
+#### Что приходит в голову
+
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int[] indices = new int[2];
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] + nums[j] == target)
+                    return new int[] {i, j};
+            }
+        }
+            
+        return indices;
+    }
+}
+```
+
+#### Как сделать быстрее?
+
+Лучший способ маппинга индекса и элемента - хэш-таблица. Поиск происходит за `O(1)`, в случае коллизий дегенерирует до `O(n)`
+
+Сначала бежим по массиву, чтобы установить соответствие, а потом - чтобы искать нужный индекс. 
+
+Итак, это будет работать за  `O(n)`, а не за квадрат
+
+```java
+public int[] twoSum(int[] nums, int target) {
+    Map<Integer, Integer> map = new HashMap<>();
+    for (int i = 0; i < nums.length; i++) {
+        map.put(nums[i], i);
+    }
+    for (int i = 0; i < nums.length; i++) {
+        int complement = target - nums[i];
+        if (map.containsKey(complement) && map.get(complement) != i) {
+            return new int[] { i, map.get(complement) };
+        }
+    }
+    throw new IllegalArgumentException("No two sum solution");
+}
+```
+
+#### Еще чуть лучше
+
+Будем делать 1 проход, а не 2. Нужного индекса в мапе может и не оказаться, но потом он добавится всё равно. И можно будет уже для этого индекса искать пару (которая уже есть)
+ 
+```java
+public int[] twoSum(int[] nums, int target) {
+    Map<Integer, Integer> map = new HashMap<>();
+    for (int i = 0; i < nums.length; i++) {
+        int complement = target - nums[i];
+        if (map.containsKey(complement)) {
+            return new int[] { map.get(complement), i };
+        }
+        map.put(nums[i], i);
+    }
+    throw new IllegalArgumentException("No two sum solution");
+}
+```
+
+
+
 # Container With Most Water
 https://leetcode.com/problems/container-with-most-water/
 
