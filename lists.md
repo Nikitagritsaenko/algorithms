@@ -63,3 +63,65 @@ class Solution {
     }
 }
 ```
+# Middle of the Linked List
+https://leetcode.com/problems/middle-of-the-linked-list
+
+## Что пришло в голову
+
+Пройтись по списку один раз, чтобы узнать его длину.
+
+Посчитать медиану.
+
+Пройтись по списку во второй раз, чтобы извлечь из него медиану.
+```java
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        if (head == null)
+            return null;
+        if (head.next == null)
+            return head;
+        
+        int num_elems = 1;
+        ListNode curr = head.next;
+        
+        while (curr != null) {
+            num_elems = num_elems + 1;
+            curr = curr.next;
+        }
+        
+        int median = 0;
+        if (num_elems % 2 == 0)
+            median = num_elems / 2 + 1;
+        else
+            median = Math.round(num_elems / 2.0f);
+         
+        curr = head;
+        int idx = 1;
+        while (true) {
+            if (idx == median)
+                return curr;
+            curr = curr.next;
+            idx = idx + 1;
+        }
+        
+    }
+}
+```
+
+## Другие решения
+1) Перезаписать список в массив. Потом извлечь из массива медиану. Тут надо заранее знать длину списка (в задаче сказано, что максимальная длина 100, так что надо выделить массив на 100 эл-тов).
+
+2) Очень крутой подход - медленный и быстрый указатель. Медленный прыгает последовательно по элементам, быстрый - через один. Когда быстрый достиг конца списка, вернуть надо медленный.
+
+```java
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+}
+```
