@@ -37,3 +37,29 @@ class Solution {
     }
 }
 ```
+##  Решение - чуть более простое
+
+Тут используем 3 указателя - `prev`, `curr`, `next`. Так значительно проще сделать обмен в цикле. В конце надо развернуть последний элемент списка, поскольку в цикле этого не происходит.
+
+```java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null)
+            return null;
+        if (head.next == null)
+            return head;
+        
+        ListNode prev = null, curr = head, next = head.next;
+    
+        while (next != null) {
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+            next = next.next;
+        } 
+        
+        curr.next = prev;
+        return curr;
+    }
+}
+```
