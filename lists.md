@@ -208,12 +208,13 @@ public ListNode detectCycle(ListNode head) {
     while (fast != null && fast.next != null) {
         fast = fast.next.next;
         slow = slow.next;
-        if (fast == slow) {  // circle detected (в случае первой задачи вернуть true)
+        if (fast == slow) {  // circle detected 
+            // (!) (в случае первой задачи вернуть true)
             while (head != fast) {
                 fast = fast.next;
                 head = head.next;
             }
-            return head;
+            return head; 
         }
     }
     return null; // no circle (в случае первой задачи вернуть false)
