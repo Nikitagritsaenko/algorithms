@@ -151,7 +151,9 @@ public class Solution {
 ```
 
 ## Другие решения
-1) Лучше использовать `hashSet`. Здесь нет необходимости хранить пары "ключ-значение", нужны лишь ключи.
+
+#### Через HashSet
+Лучше использовать `hashSet`. Здесь нет необходимости хранить пары "ключ-значение", нужны лишь ключи.
 ```java
 public boolean hasCycle(ListNode head) {
     Set<ListNode> nodesSeen = new HashSet<>();
@@ -167,22 +169,28 @@ public boolean hasCycle(ListNode head) {
 }
 ```
 
-2) Подход с двумя указателями: быстрый и медленный. Медленный прыгает последовательно по элементам, быстрый - через один. Когда быстрый достиг значения `null`, можно сделать вывод, что цикла нет. Если указатели оказались в одном месте, то это значит, что есть цикл.
+#### Через fast & slow pointers
 
-```java
-public boolean hasCycle(ListNode head) {
+Подход с двумя указателями: быстрый и медленный. Медленный прыгает последовательно по элементам, быстрый - через один. Когда быстрый достиг значения `null`, можно сделать вывод, что цикла нет. Если указатели оказались в одном месте, то это значит, что есть цикл.
+
+
+``` java
+public ListNode detectCycle(ListNode head) {
     if (head == null || head.next == null) {
-        return false;
+        return null;   // no circle
     }
-    ListNode slow = head;
-    ListNode fast = head.next;
-    while (slow != fast) {
-        if (fast == null || fast.next == null) {
-            return false;
-        }
-        slow = slow.next;
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
         fast = fast.next.next;
+        slow = slow.next;
+        if (fast == slow) {  // circle detected
+            while (head != fast) {
+                fast = fast.next;
+                head = head.next;
+            }
+            return head;
+        }
     }
-    return true;
+    return null; // no circle
 }
 ```
