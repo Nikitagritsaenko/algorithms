@@ -125,3 +125,64 @@ class Solution {
     }
 }
 ```
+
+# Linked List Cycle
+https://leetcode.com/problems/linked-list-cycle - определить, если ли цикл в связном списке
+https://leetcode.com/problems/linked-list-cycle-ii - выдать также узел списка, который этот цикл начинает
+
+## Что пришло в голову
+
+Заведем `hashmap`. Будем по мере прохода списка добавлять туда элементы. Если такой элемент уже был, значит мы зациклились.
+```java
+public class Solution {
+   
+    public ListNode detectCycle(ListNode head) {
+        Map<ListNode, Boolean> hashMap = new HashMap<>();
+        ListNode curr = head;
+        while (curr != null) {
+            if (hashMap.containsKey(curr))
+                return curr; // или true
+            hashMap.put(curr, true);
+            curr = curr.next;
+        }
+        return null; // или false
+    }
+}
+```
+
+## Другие решения
+1) Лучше использовать `hashSet`. Здесь нет необходимости хранить пары "ключ-значение", нужны лишь ключи.
+```java
+public boolean hasCycle(ListNode head) {
+    Set<ListNode> nodesSeen = new HashSet<>();
+    while (head != null) {
+        if (nodesSeen.contains(head)) {
+            return true;
+        } else {
+            nodesSeen.add(head);
+        }
+        head = head.next;
+    }
+    return false;
+}
+```
+
+2) Подход с двумя указателями: быстрый и медленный. Медленный прыгает последовательно по элементам, быстрый - через один. Когда быстрый достиг значения `null`, можно сделать вывод, что цикла нет. Если указатели оказались в одном месте, то это значит, что есть цикл.
+
+```java
+public boolean hasCycle(ListNode head) {
+    if (head == null || head.next == null) {
+        return false;
+    }
+    ListNode slow = head;
+    ListNode fast = head.next;
+    while (slow != fast) {
+        if (fast == null || fast.next == null) {
+            return false;
+        }
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    return true;
+}
+```
