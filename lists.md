@@ -264,15 +264,19 @@ public class Solution {
         ListNode pA = headA, pB = headB;
         
         while (pA != pB) {    
-            if (pA == null)
+            if (pA == null) {
                 pA = headB;
-            else
+            }
+            else {
                 pA = pA.next;
+            }
             
-            if (pB == null)
+            if (pB == null) {
                 pB = headA;
-            else
+            }
+            else {
                 pB = pB.next;
+            }
         }
         
         return pA;
