@@ -328,3 +328,50 @@ public boolean isPalindrome(ListNode head) {
         
     }
 ```
+
+## Merge Two Sorted Lists
+
+### Решение
+Если один из списков пуст, то вернем другой.
+
+Далее будем добавлять элементы в список так же, как в merge sort.  Из двух входных списков выбираем минимальный элемент. Список, из которого был выбран элемент, сдвигается. Как только один из списков закончился, нужно к хвосту результата прикрепить второй список.
+
+Изначально список инициализуется фиктивным элементом, так что возвращается второй элемент этого списка.
+
+```java
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null)
+            return l2;
+        if (l2 == null)
+            return l1;
+        
+        ListNode merged = new ListNode(0); // dummy
+        ListNode head = merged;
+        
+        while (l1 != null && l2 != null) {
+            
+            if (l1.val <= l2.val) {
+                merged.next = l1;
+                l1 = l1.next;
+            }
+            else {
+                merged.next = l2;
+                l2 = l2.next;
+            }
+            
+            merged = merged.next;
+        }
+        
+        if (l1 == null) {
+            merged.next = l2; 
+        }
+        
+        if (l2 == null) {
+            merged.next = l1;
+        }
+        
+        return head.next;      
+    }
+}
+```
