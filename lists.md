@@ -283,3 +283,54 @@ public class Solution {
     }
 }
 ```
+## Palindrome Linked List
+
+https://leetcode.com/problems/merge-two-sorted-lists/
+
+Является односвязный список палиндромом, или нет?
+
+### Решение, которое пришло в голову (O(n) время, O(1) память)
+
+Будем использовать решения предыдущих задач
+
+1. Найдем середину в списке
+2. Развернем правую часть списка (правая часть - начиная с середины)
+3. Левую часть списка сравним с правой, по результатам выдаём ответ. 
+
+Вначале напишем условия для проверки случаев n == 0, n == 1, n == 2 (в этом случае половинки списков имеют длину 1)
+
+Для сравнения левой и правой части будем использовать 2 указателя (`pLeft` `pRight`). Если вдруг значения по указателям не совпали, то можно сразу выдать ответ `false`. При сравнении списков остановимся тогда, когда указатели встретились (`java pLeft == pRight`) - это происходит в списках нечетной длины. Если списки четной длины, то сработает условие (`pLeft.next == pRight`). Эти условия означают, что сравнение списков закончено, причём ответ `false` еще не был дан, так что списки равны, то есть исходный список - палиндром.
+
+```java
+public boolean isPalindrome(ListNode head) {
+        if (head == null)
+            return true;
+        if (head.next == null)
+            return true;
+        
+        ListNode med = middleNode(head);
+        ListNode rightPart = reverseList(med);
+      
+        ListNode pLeft = head, pRight = rightPart;
+        if (pRight.next == null) {
+            if (pLeft.val == pRight.val)
+                return true;
+            else
+                return false;
+        }
+        
+        while (true) { 
+            if (pLeft.val != pRight.val) {
+                return false;
+            }
+            if (pLeft == pRight || pLeft.next == pRight) {
+                break;
+            }
+            pLeft = pLeft.next;
+            pRight = pRight.next;
+        }
+        
+        return true;
+        
+    }
+```
