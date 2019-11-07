@@ -28,6 +28,8 @@ https://leetcode.com/problems/binary-search
 ```
 
 ## Search in rotated sorted array
+https://leetcode.com/problems/search-in-rotated-sorted-array
+
 Дан массив, который получен из отсортированного путем поворота вокруг какой-то точки.
 
 Например, 1 2 3 4 5 6 => 3 4 5 6 1 2
