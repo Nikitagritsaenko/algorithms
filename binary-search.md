@@ -66,7 +66,7 @@ class Solution {
                  else
                     start = mid + 1;
             } 
-            else if (nums[mid] <= nums[end]) {
+            else {
                 if (target > nums[mid] && target <= nums[end])
                     start = mid + 1;
                  else
@@ -76,4 +76,41 @@ class Solution {
         return -1;
     }
 }
+```
+
+## Find minimum in rotated sorted array
+
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+
+### Решение
+
+Заметим, что минимумом в этом массиве является как раз именно та точка, по которой массив повернули. Хотя бывает, что массив и не поворачивали, так что ответом может быть и nums[0]
+
+Найдем точку поворота (`pivot`) бинарным поиском.
+
+```java
+    public int findMin(int[] nums) {
+        int start = 0;
+        int end = nums.length - 1;
+        
+        int pivot = -1;
+        
+        while (start <= end) {
+            
+            pivot = (start + end) / 2;
+            
+            if (nums[0] <= nums[pivot]) { //массив от 0 до pivot отсортирован => не подходит нам
+                start = pivot + 1;
+            } 
+            else {
+                // массив от 0 до pivot не отсортирован, значит pivot внутри него.
+                if (nums[pivot-1] > nums[pivot]) // может быть так, что pivot уже найден, и дальше нет смысла искать
+                    return nums[pivot];
+                end = pivot - 1;
+            }
+        }
+      
+        // если дошли до этой строчки кода, то значит pivot не был найден
+        return nums[0];
+    }
 ```
