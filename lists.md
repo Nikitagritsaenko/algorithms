@@ -409,6 +409,7 @@ class Solution {
 ```
 
 ## Remove Nth Node From End of List
+https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 
 Удалить n-ый элемент с конца односвязного списка. Как сделать это за 1 проход?
 
@@ -437,5 +438,42 @@ class Solution {
         
         return start.next;
     }
+}
+```
+
+## Sort List
+https://leetcode.com/problems/sort-list
+
+Остортировать список за O(n * log n)
+### Решение - merge sort
+Делим список на 2 части, для каждой рекурсивно запускаем деление. Затем происходит сортировка слиянием.
+
+По памяти работает за O(n) - из-за стека вызовов. В теории можно сделать итеративно, чтобы по памяти работало за O(1). Для этого используется двойной цикл: первый по размеру кусочков (1, 2, 4, 8, ...), второй - по индексу левого подсписка. Кусочки сливаются воедино посредством вызова функции слияния.
+
+```java
+public class Solution {
+  
+  public ListNode sortList(ListNode head) {
+    if (head == null || head.next == null)
+      return head;
+        
+    // step 1. cut the list to two halves
+    ListNode prev = null, slow = head, fast = head;
+    
+    while (fast != null && fast.next != null) {
+      prev = slow;
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+    
+    prev.next = null;
+    
+    // step 2. sort each half
+    ListNode l1 = sortList(head);
+    ListNode l2 = sortList(slow);
+    
+    // step 3. merge l1 and l2
+    return merge(l1, l2);
+  }
 }
 ```
