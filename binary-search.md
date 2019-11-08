@@ -117,6 +117,7 @@ https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 ## Find K closest elements in a sorted array
 https://leetcode.com/problems/find-k-closest-elements/
 Есть отсортированный массив `arr`, число `k`, число `x`. Надо из этого массива вернуть `k` чисел, ближайших к `x`.
+Все числа массива положительные.
 
 ### Решение
 Пусть массив длины n. Очевидно, что задача сводится к поиску ближайшего к числу `x` элемента по индексам [0..n-k-1], 
@@ -125,30 +126,21 @@ https://leetcode.com/problems/find-k-closest-elements/
 
 Для этого в бинарном поиске будем смотреть отрезок [mid..mid+k]
 
-Теперь найдем, в какой границе отрезка находится значение, более близкое к `x`. Исходя из этого можно удалить из рассмотрения область до `mid`, либо область после `mid`. Таким образом, после некоторого числа итераций, будет найдено значение, наиболее близкое к `x`.
-
-(!) Важно, что в проверке расстояния до числа `x` стоит знак "меньше". В случае, когда
-`Math.abs(x - arr[mid]) == Math.abs(x - arr[mid+k])`, предпочтение отдается элементам с наименьшим индексом. Например, если
-смотрим отрезок [1 1 2 2 3 3 3], а надо найти 2 числа, ближайшие к двойке, то поиск будем продолжать в отрезке [1 1 2], а не [3 3 3]
-
-UPD: решение неверное, несмотря на то, что его принимает сайт.
-Контрпример: [1,1,1,2,3,3,3,3], ищем одно число, ближайшее к 2. На выходе 1. 
-Надо найти другое решение.
+???
 
 ```java
 class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
-        int start = 0, end = arr.length - 1 - k, mid;
-        
-        while (start <= end) {
-            mid = (start + end) / 2;
-            if (Math.abs(x - arr[mid]) > Math.abs(x - arr[mid+k])) { // (mid+k)-ый элемент ближе к x, чем (mid)-ый
-                start = mid + 1; // ищем в (mid..end]
+        int start = 0, end = arr.length - k;
+        while (start < end) {
+            int mid = (start + end) / 2;
+            if (2 * x > arr[mid] + arr[mid+k]) {
+                start = mid + 1;
             }
             else {
-                end = mid - 1; // ищем в [start..mid)
+                end = mid;
             }
-        }
+        }   
         
         List<Integer> res = new ArrayList(k);
         for (int i = 0; i < k; ++i) {
