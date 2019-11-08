@@ -375,3 +375,34 @@ class Solution {
     }
 }
 ```
+## Reorder List
+
+Переформировать входной односвязный список следующим образом: первый - последний - второй - предпоследний - третий...
+
+### Решение
+1. Найдем средний элемент списка
+2. Правую часть развернем
+3. Из левой и правой части составим новый список (см. цикл)
+
+```java
+class Solution {
+    /* define middleNode, reverseList */
+    
+    public void reorderList(ListNode head) {
+        ListNode med = middleNode(head);
+        ListNode rightPart = reverseList(med);
+      
+        ListNode pLeft = head, pRight = rightPart;
+   
+        while (pLeft != pRight && pLeft.next != pRight) { 
+            ListNode nextLeft = pLeft.next, nextRight = pRight.next;
+            
+            pLeft.next = pRight;
+            pRight.next = nextLeft;
+           
+            pLeft = nextLeft;
+            pRight = nextRight;
+        }
+    }
+}
+```
