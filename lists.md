@@ -376,6 +376,7 @@ class Solution {
 }
 ```
 ## Reorder List
+https://leetcode.com/problems/reorder-list
 
 Переформировать входной односвязный список следующим образом: первый - последний - второй - предпоследний - третий...
 
@@ -403,6 +404,38 @@ class Solution {
             pLeft = nextLeft;
             pRight = nextRight;
         }
+    }
+}
+```
+
+## Remove Nth Node From End of List
+
+Удалить n-ый элемент с конца односвязного списка. Как сделать это за 1 проход?
+
+### Решение
+2 указателя. Первый идет с головы списка, а второй так, что окно между ним и первым равно n+1. Как только второй указатель дошел до конца, первый указатель как раз оказывается перед удаляемым элементом. Дальше удалить легко.
+
+Фиктивный элемент в начале списка нужен для случаев удаления головы. Без фиктивного элемента вылезем в этом случае из списка, так как двигаем второй указатель на n+1.
+
+```java
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode start = new ListNode(0); // dummy
+        start.next = head;
+        ListNode p1 = start, p2 = start;
+        
+        for (int i = 0; i < n + 1; i++) {
+            p2 = p2.next;
+        }
+        
+        while (p2 != null) {
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        
+        p1.next = p1.next.next;
+        
+        return start.next;
     }
 }
 ```
