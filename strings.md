@@ -1,3 +1,7 @@
+# Strings
+- [Longest Substring Without Repeating Characters](#longest-substring-without-repeating-characters)
+- [Generate Parentheses](#generate-parentheses)
+
 ## Longest Substring Without Repeating Characters
 https://leetcode.com/problems/longest-substring-without-repeating-characters/
 Найти наибольшую подстроку, у которой все элементы разные
@@ -75,7 +79,7 @@ public class Solution {
     }
 }
 ```
-# Generate Parentheses
+## Generate Parentheses
 https://leetcode.com/problems/generate-parentheses/solution/
 
 Дано число `n` - количество пар скобок. Вывести все валидные строки длиной `2n`, содержащие эти строки.
