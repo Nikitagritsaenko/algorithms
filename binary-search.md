@@ -10,7 +10,7 @@ https://leetcode.com/problems/binary-search
     public int search(int[] nums, int target) {
         int a = 0, b = nums.length - 1, m;
         while (a <= b) {
-            m = (a + b) / 2;
+            m = a + (b - a) / 2;
             if (nums[m] == target) {
                 return m;
             }
@@ -55,8 +55,8 @@ class Solution {
         int start = 0;
         int end = nums.length - 1;
           
-        while (start <= end){
-            int mid = (start + end) / 2;
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
             if (nums[mid] == target)
                 return mid;
         
@@ -97,7 +97,7 @@ https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
         
         while (start <= end) {
             
-            pivot = (start + end) / 2;
+            pivot = start + (end - start) / 2;
             
             if (nums[0] <= nums[pivot]) { //массив от 0 до pivot отсортирован => не подходит нам
                 start = pivot + 1;
@@ -142,7 +142,7 @@ class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
         int start = 0, end = arr.length - k;
         while (start < end) {
-            int mid = (start + end) / 2;
+            int mid = start + (end - start) / 2;
             if (x - arr[mid] > arr[mid+k] - x) {
                 start = mid + 1;
             }
