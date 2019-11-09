@@ -1,4 +1,9 @@
-# Two Sum
+# Arrays
+
+- [Two Sum](#two-sum)
+- [Container With Most Water](#container-with-most-water)
+
+## Two Sum
 https://leetcode.com/problems/two-sum/solution/
 
 Есть целевое значение `target` и входной массив `nums`. Нужно в массиве найти 2 индекса, которые соответствуют 2 числам массива, сумма которых равна `target`
@@ -67,7 +72,7 @@ public int[] twoSum(int[] nums, int target) {
 
 
 
-# Container With Most Water
+## Container With Most Water
 https://leetcode.com/problems/container-with-most-water/
 
 Дан входной массив - высоты вертикальных столбиков. Представим, что между каждой парой столбиков можно наполнить простанство водой.
