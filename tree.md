@@ -1,4 +1,9 @@
-# Maximum Depth of Binary Tree
+# Trees
+
+- [Maximum Depth of Binary Tree](#maximum-depth-of-binary-tree)
+- [Construct Binary Tree from Preorder and Inorder Traversal](#construct-binary-tree-from-preorder-and-inorder-traversal)
+
+## Maximum Depth of Binary Tree
 https://leetcode.com/problems/maximum-depth-of-binary-tree/
 ```java
 public int maxDepth(TreeNode root) {
@@ -8,7 +13,7 @@ public int maxDepth(TreeNode root) {
 }
 ```
 
-# Construct Binary Tree from Preorder and Inorder Traversal
+## Construct Binary Tree from Preorder and Inorder Traversal
 https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
 
 For example, given
