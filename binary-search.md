@@ -1,3 +1,9 @@
+# Binary search
+- [Search in sorted array](#search-in-sorted-array)
+- [Search in rotated sorted array](#search-in-rotated-sorted-array)
+- [Find minimum in rotated sorted array](#find-minimum-in-rotated-sorted-array)
+- [Find K closest elements in a sorted array](#find-k-closest-elements-in-a-sorted-array)
+
 ## Search in sorted array
 https://leetcode.com/problems/binary-search
 ### Решение
