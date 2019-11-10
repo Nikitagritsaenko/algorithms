@@ -1,6 +1,6 @@
 # Design
 - [Implement Queue using Stacks](#implement-queue-using-stacks)
-
+- [Implement Stack using Queues](#implement-stack-using-queues)
 ## Implement Queue using Stacks
 https://leetcode.com/problems/implement-queue-using-stacks/
 
@@ -71,3 +71,70 @@ https://leetcode.com/problems/implement-queue-using-stacks/
         return (s1.isEmpty() && s2.isEmpty());
     }
 ```
+## Implement Stack using Queues
+https://leetcode.com/problems/implement-stack-using-queues
+
+### Two Queues
+
+Будем стек представлять как 2 очереди. Также будем в переменной `top` хранить элемент, добавленный в "стек" последним.
+
+```java
+class MyStack {
+    
+    private Queue<Integer> q1 = new LinkedList<>();
+    private Queue<Integer> q2 = new LinkedList<>();
+    private int top;
+```
+
+**push**
+
+Всегда будем добавлять элемент в первую очередь. Так так этот элемент должен быть на вершине стека, сохраним его в top.
+
+```java
+    /** Push element x onto stack. */
+    public void push(int x) {
+        q1.add(x);
+        top = x;
+    }
+```
+
+**pop**
+
+Извлечь элемент из стека - значит снять с верхушки стека. Или же взять последний элемент первой очереди. Для этого все элементы очереди перекладываются на вторую очередь. Причем в переменную top запишется предпоследний элемент первой очереди - это новая верхушка стека. Далее очереди меняем местами. Вторая очередь - это та же первая очередь, но без хвоста. Порядок элементов не нарушен. Таким образом, первая очередь остается без последнего элемента, а вторая остается пустой.
+
+```java
+    /** Removes the element on top of the stack and returns that element. */
+    public int pop() {
+        while (q1.size() > 1) {
+            top = q1.remove();
+            q2.add(top);
+        }
+        int res = q1.remove();
+        Queue<Integer> tmp = q1;
+        q1 = q2;
+        q2 = tmp;
+        
+        return res;
+    }
+```
+**top**
+
+Значение top сохраняется при добавлении в первую очередь. И операция pop меняет значение переменной top на предпоследний элемент первой очереди. Таким образом, в переменной top всегда лежит значение верхушки стека, вне зависимости от количества применённых до этого операций pop и push.
+
+```java
+   public int top() {
+        return top;
+    }
+```
+
+**empty**
+
+Так как стек хранится по сути только в первой очереди, то стек пуст тогда, когда пуста первая очередь.
+
+```java
+    /** Returns whether the stack is empty. */
+    public boolean empty() {
+        return (q1.isEmpty());
+    }
+```
+**Получился на самом деле стек на одной очереди, вторая очередь вспомогательная, её можно создавать локально внутри операции pop.**
