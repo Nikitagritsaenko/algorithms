@@ -1,6 +1,8 @@
 # Design
 - [Implement Queue using Stacks](#implement-queue-using-stacks)
 - [Implement Stack using Queues](#implement-stack-using-queues)
+- [Min Stack](#min-stack)
+
 ## Implement Queue using Stacks
 https://leetcode.com/problems/implement-queue-using-stacks/
 
@@ -138,3 +140,42 @@ class MyStack {
     }
 ```
 **Получился на самом деле стек на одной очереди, вторая очередь вспомогательная, её можно создавать локально внутри операции pop.**
+
+## Min Stack
+https://leetcode.com/problems/min-stack/
+
+Реализовать стек, в котором можно за O(1) выполнить операции: push, pop, top, getMin. Сложность именно в getMin.
+
+### Решение
+Можно реализовать 2 стека. В первый стек всегда делать push, во второй стек добавлять элемент только в том случае, если он меньше или равен верхушке стека. Если элемент удаляем из первого стека, то надо его удалить и из второго. Для каждого состояния первого стека (после нескольких операций push, pop) всегда на верхушке второго стека будет лежать минимум.
+
+```java
+    Deque<Integer> stack = new ArrayDeque<Integer>();
+    Deque<Integer> min_stack = new ArrayDeque<Integer>();
+    
+    public void push(int x) {
+        if (min_stack.isEmpty()) {
+            min_stack.push(x);
+        }
+        else if (x <= min_stack.peek()) {
+            min_stack.push(x);
+        }
+        stack.push(x);
+    }
+    
+    public int pop() {
+        int elem = stack.pop();
+        if (elem == min_stack.peek()) {
+            min_stack.pop();
+        }
+        return elem;
+    }
+    
+    public int top() {
+        return stack.peek();
+    }
+    
+    public int getMin() {
+        return min_stack.peek();
+    }
+```
