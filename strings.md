@@ -1,37 +1,11 @@
 # Strings
 - [Longest Substring Without Repeating Characters](#longest-substring-without-repeating-characters)
+- [Longest Repeating Character Replacement](#longest-repeating-character-replacement)
 - [Generate Parentheses](#generate-parentheses)
 
 ## Longest Substring Without Repeating Characters
 https://leetcode.com/problems/longest-substring-without-repeating-characters/
 Найти наибольшую подстроку, у которой все элементы разные
-
-### Решение "в лоб"
-
-Элементы текущей подстроки хранятся в `map`. Когда находим подстроку, возвращаемся к её началу и сдвигаемся на 1 
-символ вправо, очищаем словарь, снова начинаем поиск. Решение не эффективно по времени.
-
-```java
-class Solution {
-    public int lengthOfLongestSubstring(String s) {
-        int N = s.length();
-        int length = 0, lastPos = 0;
-        Map<Character, Boolean> map = new HashMap<Character, Boolean>();
-        int i = 0;
-        while (i < N) {
-            if (map.containsKey(s.charAt(i))) {
-                length = Math.max(length, map.size());
-                map.clear();
-                i = lastPos;
-                lastPos = i + 1;
-            }
-            map.putIfAbsent(s.charAt(i), true);
-            i++;
-        }
-        return Math.max(length, map.size());
-    }
-}
-```
 
 ### Решение со "скользящим окном"
 Здесь берется окно от `i` to `j`. Все элементы, лежащие внутри окна, записаны в `Set`. Если встречается символ, не лежащий в множестве, тогда
@@ -79,6 +53,61 @@ public class Solution {
     }
 }
 ```
+
+## Longest Repeating Character Replacement
+Дана строка, состоящая из заглавных букв, можно заменить k букв на другие буквы. После таких k замен найти максимально возможное количество одних и тех же подряд идущих букв.
+
+### Решение
+Используем sliding window. Будем хранить массив, в котором будет лежать количество каждого символа в окне. Размер окна не уменьшается внутри цикла. Окно либо остается той же длины (когда его обрезают слева и расширяют справа), либо увеличивается (когда только расширяют справа). Ответом является максимальная длина такого окна.
+
+#### Код с объяснением
+```java
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int len = s.length();
+        int[] count = new int[26];
+        int start = 0, maxCount = 0, maxWindowSize = 0; // окно [start, end]
+        for (int end = 0; end < len; end++) {
+            count[s.charAt(end) - 'A']++; // на правой границе окна встретили символ => увеличим его count на 1
+            maxCount = Math.max(maxCount, count[s.charAt(end) - 'A']); // количество самых часто встречающихся символов в окне
+            int currWindowSize = end - start + 1; // текущий размер окна
+            // если currWindowSize == maxCount, то окно заполнено одним и тем же символом
+            // eсли currWindowSize > maxCount, то окно заполнено не только самым часто встречающимся символом
+            // если currWindowSize - maxCount == k, то внутри окна можно сделать k замен 
+            // ecли currWindowSize - maxCount > k, то больше не можем делать замены символов
+            if (currWindowSize - maxCount > k) {
+                // окно обрезаем слева, уменьшаем количество вхождений левого символа
+                count[s.charAt(start) - 'A']--;
+                start++;
+                currWindowSize--;
+            }
+            maxWindowSize = Math.max(maxWindowSize, currWindowSize);
+        }
+        return maxWindowSize;
+    }
+}
+```
+#### Более компактная запись
+
+```java
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int len = s.length();
+        int[] count = new int[26];
+        int start = 0, maxCount = 0, maxLength = 0;
+        for (int end = 0; end < len; end++) {
+            maxCount = Math.max(maxCount, ++count[s.charAt(end) - 'A']);
+            if (end - start + 1 - maxCount > k) {
+                count[s.charAt(start) - 'A']--;
+                start++;
+            }
+            maxLength = Math.max(maxLength, end - start + 1);
+        }
+        return maxLength;
+    }
+}
+```
+
 ## Generate Parentheses
 https://leetcode.com/problems/generate-parentheses/solution/
 
