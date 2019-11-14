@@ -55,6 +55,8 @@ public class Solution {
 ```
 
 ## Longest Repeating Character Replacement
+https://leetcode.com/problems/longest-repeating-character-replacement
+
 Дана строка, состоящая из заглавных букв, можно заменить k букв на другие буквы. После таких k замен найти максимально возможное количество одних и тех же подряд идущих букв.
 
 ### Решение
