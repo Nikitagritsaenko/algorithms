@@ -1,7 +1,55 @@
 # Strings
+- [Template for substring tasks](#template-for-substring-tasks)
 - [Longest Substring Without Repeating Characters](#longest-substring-without-repeating-characters)
 - [Longest Repeating Character Replacement](#longest-repeating-character-replacement)
 - [Generate Parentheses](#generate-parentheses)
+- [Minimum Window Substring](#minimum-window-substring)
+
+## Template for substring tasks (cpp)
+
+```c++
+int findSubstring(string s){
+        vector<int> map(128,0);
+        int counter; // для проверки корректности подстроки
+        int begin = 0, end = 0; // окно
+        int d; // размер подстроки
+
+        for() { /* инициализировать нужным образом мапу */ }
+
+        // цикл по всей строке
+        while(end < s.size()){
+            
+            if(map[s[end]] ??) { // проверить критерий качества, обновить counter }
+            
+            map[s[end]]-- (++);
+            // увеличить / уменьшить количество метрики для символа конца окна
+            
+            // цикл, в котором выполняется критерий поиска ответа (критерий сделан с помощью counter), 
+            // при выходе из цикла получим оптимальный ответ (максимально сдвинутый слева)
+            
+            while (/*критерий поиска*/) { 
+                // обновить d до получения оптимального ответа
+                // сузить окно слева
+                begin++;
+                
+                // если выполняется условие, ведущее к нарушению критерия (т.е если окно больше не подходит), то
+                if (map[s[begin]] ??){ 
+                   // изменить counter (т.е подать сигнал о том, что окно не подходит, дальше сужать некуда, из цикла надо выйти)
+                }
+                
+                map[s[begin]]++ (--); // увеличить / уменьшить количество метрики для символа начала окна
+            }  
+
+            // пересчитать ответ (d) с помощью begin и end
+            
+            // расширить окно справа
+            end++;
+        }
+        
+        // вернуть ответ или пустую строку, если не нашли окно
+        return d;
+  }
+```
 
 ## Longest Substring Without Repeating Characters
 https://leetcode.com/problems/longest-substring-without-repeating-characters/
@@ -176,3 +224,85 @@ class Solution {
 }
 ```
 
+## Minimum Window Substring
+
+https://leetcode.com/problems/minimum-window-substring
+
+Даны 2 строки: S и T. Найти в строке S окно минимальной длины, которое содержит все символы строки T (при том с нужной кратностью!).
+
+### Решение
+
+Метод sliding window. Используем 2 мапы: `dictT` хранит количество уникальных символов в строке T; `windowCounts` хранит
+для текущего окна количество вхождений в него каждого символа.
+
+Окно расширяем справа в цикле. Когда окно заполнилось, сужаем его слева во вложенном цикле до тех пор, пока левая граница не станет оптимальной (т.е заполненное окно будет минимальной длины)
+
+```java
+class Solution {
+    public String minWindow(String s, String t) {
+        // 0. Проверка на пустоту
+        if (s.length() == 0 || t.length() == 0) {
+            return "";
+        }
+
+        // 1. Построить map с количеством всех уникальных символов в строке T
+        Map<Character, Integer> dictT = new HashMap<Character, Integer>();
+        
+        for (int i = 0; i < t.length(); i++) {
+            int count = dictT.getOrDefault(t.charAt(i), 0);
+            dictT.put(t.charAt(i), count + 1);
+        }
+        
+        // 2. Инициализация окна 
+        //количество символов, необходимое внутри окна (по сути минимально возможный р-р окна)
+        int required = dictT.size(); 
+    
+        int l = 0, r = 0; // окно
+        int formed = 0; // количество символов, которые вошли в окно с нужной кратностью
+        
+        // 3. Построить map с количеством вхождений в окно всех уникальных символов строки T 
+        Map<Character, Integer> windowCounts = new HashMap<Character, Integer>();
+        
+        int[] ans = {-1, 0, 0}; // (window length, left, right)
+
+        while (r < s.length()) {
+            // 1. Добавить правый элемент окна в map окна (число вхождений увеличиваем на 1)
+            char c = s.charAt(r);
+            int count = windowCounts.getOrDefault(c, 0);
+            windowCounts.put(c, count + 1);
+
+            // 2. Проверить, набралось ли достаточное количество данного символа в окне
+            if (dictT.containsKey(c) && windowCounts.get(c).intValue() == dictT.get(c).intValue()) {
+                formed++;
+            }
+
+            // 3. Уменьшаем окно слева до того момента, когда оно перестаёт подходить под критерий formed == required
+            while (l <= r && formed == required) {
+                c = s.charAt(l);
+                
+                // сохраняем минимальное окно
+                if (ans[0] == -1 || r - l + 1 < ans[0]) {
+                    ans[0] = r - l + 1;
+                    ans[1] = l;
+                    ans[2] = r;
+                }
+
+                // удалим левый символ из окна
+                windowCounts.put(c, windowCounts.get(c) - 1); // уменьшим на 1 количество его вхождений
+                
+                // если количество вхождений этого символа в окно стало меньше, чем нужно, то критерий больше не выполняется
+                if (dictT.containsKey(c) && windowCounts.get(c).intValue() < dictT.get(c).intValue()) {
+                    formed--;
+                }
+
+                l++;
+            }
+
+            // 4. Увеличить окно справа
+            r++;   
+        }
+
+        return ans[0] == -1 ? "" : s.substring(ans[1], ans[2] + 1);
+    }
+}
+```
