@@ -5,7 +5,7 @@
 - [Generate Parentheses](#generate-parentheses)
 - [Minimum Window Substring](#minimum-window-substring)
 - [Group Anagrams](#group-anagrams)
-- [](#)
+- [Valid Parentheses](#valid-parentheses)
 - [](#)
 - [](#)
 - [](#)
@@ -370,6 +370,39 @@ class Solution {
             map.get(sortString).add(string);
         }
         return new ArrayList<>(map.values());
+    }
+}
+```
+
+## Valid Parentheses
+https://leetcode.com/problems/valid-parentheses
+
+### Решение с помощью стека
+
+```java
+class Solution {
+    public boolean isValid(String s) {
+        Deque <Character> stack = new ArrayDeque<>();
+        Map <Character, Character> map = new HashMap<>();
+        map.put('}', '{');
+        map.put(']', '[');
+        map.put(')', '(');
+        
+        for (int i = 0; i < s.length(); i++) {
+            Character c = s.charAt(i);
+            if (!map.containsKey(c)) {
+                stack.push(c);
+            }
+            else {
+                char top = stack.isEmpty() ? ' ' : stack.pop();
+                if (top != map.get(c)) {
+                    return false;
+                }
+            }
+
+        }
+        
+        return stack.isEmpty();
     }
 }
 ```
