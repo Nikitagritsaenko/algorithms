@@ -7,6 +7,7 @@
 - [Group Anagrams](#group-anagrams)
 - [Valid Parentheses](#valid-parentheses)
 - [Valid Palindrome](#valid-palindrome)
+- [Is Subsequence](#is-subsequence)
 - [](#)
 - [](#)
 
@@ -467,6 +468,49 @@ class Solution {
     
         return true;
 
+    }
+}
+```
+## Is Subsequence
+https://leetcode.com/problems/is-subsequence
+
+Даны две строки - `s` и `t`. Определить, является ли первая строка **подпоследовательностью** второй строки.
+
+### Решение 1
+Просто итерируемся по двум строкам. Указатель по второй строке ходит каждый шаг, а по первой - только тогда, когда символы по двум указателям
+совпали. Таким образом, если в первой строке указатель дошел до конца, то она является подпоследовательностью второй строки.
+
+```java
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        int i = 0, j = 0;
+        while (i < s.length() && j < t.length()) {
+            if (s.charAt(i) == t.charAt(j)) {
+                i++;
+            }
+            j++;
+        }
+        
+        return (i >= s.length());
+    }
+}
+```
+
+### Решение 2
+
+Используем метод **indexOf**, который ищет индекс символа в строке. Если вдруг индекс не найден (метод вернул -1), то и символа нет во второй строке, значит ответ false.
+
+```java
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        int index = -1;
+        for(char c : s.toCharArray()) {
+            index = t.indexOf(c, index + 1);
+            if(index == -1) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 ```
