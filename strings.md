@@ -6,7 +6,7 @@
 - [Minimum Window Substring](#minimum-window-substring)
 - [Group Anagrams](#group-anagrams)
 - [Valid Parentheses](#valid-parentheses)
-- [](#)
+- [Valid Palindrome](#valid-palindrome)
 - [](#)
 - [](#)
 
@@ -377,7 +377,7 @@ class Solution {
 ## Valid Parentheses
 https://leetcode.com/problems/valid-parentheses
 
-Дана строка, содержащая скобки {} [] (). Определить, является ли комбинация скобок валидной.
+Дана строка, содержащая скобки `{}` `[]` `()`. Определить, является ли комбинация скобок валидной.
 
 ### Решение с помощью стека
 
@@ -410,6 +410,63 @@ class Solution {
         }
         
         return stack.isEmpty();
+    }
+}
+```
+
+## Valid Palindrome
+https://leetcode.com/problems/valid-palindrome
+
+### Решение
+
+Идея простая и эффективная - берем два указателя (один с начала, другой с конца строки). Затем двигаем их друг к другу и сравниваем
+символы по этим указателям. При этом лишние символы (не буквы и не цифры) просто пропускаем. Если символы по двум указателям не совпали, то значит строка не является палиндромом. Если указатели встретились и в результате всех сравнений не было выявлено, что строка не палиндром, то она - палиндром.
+
+```java
+class Solution {
+    private static boolean isAlphaNumeric(char c) {
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+    }
+
+    private static int toLowerCase(char c) {
+        return c >= 'A' && c <= 'Z' ? c + ('a' - 'A') : c;
+    }
+
+    
+    public boolean isPalindrome(String s) {
+        if (s == null || s.isEmpty() || s.length() == 1) {
+            return true;
+        }
+        
+        int i = 0, j = s.length() - 1;
+        
+        while (true) {
+            
+            while (!isAlphaNumeric(s.charAt(i)) && i < j) {
+                i++;
+            }
+                
+            while (!isAlphaNumeric(s.charAt(j)) && i < j) {
+                j--;
+            }
+            
+            if (i >= j)
+                break;
+            
+            char c1 = s.charAt(i);
+            char c2 = s.charAt(j);
+            
+            if (toLowerCase(c1) != toLowerCase(c2)) {
+                return false;
+            }
+            
+            i++;
+            j--;
+            
+        }
+    
+        return true;
+
     }
 }
 ```
