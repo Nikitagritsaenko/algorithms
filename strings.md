@@ -4,6 +4,11 @@
 - [Longest Repeating Character Replacement](#longest-repeating-character-replacement)
 - [Generate Parentheses](#generate-parentheses)
 - [Minimum Window Substring](#minimum-window-substring)
+- [Group Anagrams](#group-anagrams)
+- [](#)
+- [](#)
+- [](#)
+- [](#)
 
 ## Template for substring tasks (cpp)
 
@@ -303,6 +308,68 @@ class Solution {
         }
 
         return ans[0] == -1 ? "" : s.substring(ans[1], ans[2] + 1);
+    }
+}
+```
+
+## Group Anagrams
+https://leetcode.com/problems/group-anagrams
+
+Дан список строк. Нужно вернуть список из списков, где эти строки сгруппированы на анаграммы.
+
+### Решение 1 - формирование уникального кода для каждой анаграммы
+
+Для каждой строки посчитаем частоты вхождения каждого символа. Частоты представлены в виде массива на 26 элементов. Очевидно, что
+строки являются анаграммами друг друга в том случае, если соответствующие 26-разрядные массивы совпадают. Поэтому на основе массива
+генерируется код, по которому хранится список анаграмм. Если у двух строк коды разные, то они будут лежать в разных списках.
+
+```java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+        
+        for (String str : strs) {
+            int[] freq = new int[26];
+            
+            for (int i = 0; i < str.length(); i++) {
+                freq[str.charAt(i) - 'a']++;
+            }
+            
+            StringBuilder sb = new StringBuilder("");
+            for (int i = 0; i < 26; i++) {
+                sb.append(' ').append(freq[i]);
+            }
+            String key = sb.toString();
+            
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<>());
+            }
+
+            map.get(key).add(str);
+        }
+        return new ArrayList(map.values());
+    }
+}
+```
+
+### Решение 2 - сортировать строки
+Строки являются анаграммами друг друга в том случае, если они совпадают после сортировки. Поэтому в качестве ключа может служить отсортированная строка.
+
+```java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String, ArrayList<String>> map = new HashMap<>();
+        
+        for (String string : strs){
+            
+            char[] stringChar = string.toCharArray();
+            Arrays.sort(stringChar);
+            String sortString = String.valueOf(stringChar);
+            
+            map.putIfAbsent(sortString, new ArrayList<String>());
+            map.get(sortString).add(string);
+        }
+        return new ArrayList<>(map.values());
     }
 }
 ```
