@@ -8,7 +8,7 @@
 - [Valid Parentheses](#valid-parentheses)
 - [Valid Palindrome](#valid-palindrome)
 - [Is Subsequence](#is-subsequence)
-- [](#)
+- [Longest Palindromic Substring](#longest-palindromic-substring)
 - [](#)
 
 ## Template for substring tasks
@@ -514,3 +514,10 @@ class Solution {
     }
 }
 ```
+
+## Longest Palindromic Substring
+https://leetcode.com/problems/longest-palindromic-substring
+
+В данной строке найти подстроку-палиндром наибольшей длины.
+
+### Решение
