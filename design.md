@@ -2,6 +2,7 @@
 - [Implement Queue using Stacks](#implement-queue-using-stacks)
 - [Implement Stack using Queues](#implement-stack-using-queues)
 - [Min Stack](#min-stack)
+- [LRU Cache](#lru-cache)
 
 ## Implement Queue using Stacks
 https://leetcode.com/problems/implement-queue-using-stacks/
@@ -178,4 +179,131 @@ https://leetcode.com/problems/min-stack/
     public int getMin() {
         return min_stack.peek();
     }
+```
+## LRU Cache
+https://leetcode.com/problems/lru-cache/
+
+Реализовать структуру данных Least Recently Used (LRU) cache с операциями `get(key)` и `put(key, value)` за O(1)
+
+### Решение - Double linked list + Hashmap
+
+Будем использовать двусвязный список с фиктивными head и tail. Так удобнее добавлять элементы в голову списка и удалять элементы из
+хвоста списка. HashMap нужна для быстрого доступа к любому элементу двусвязного списка.
+
+В голове списка будут лежать более новые элементы, в хвосте - более старые. Добавляется элемент всегда в голову (после фиктивной головы). Удалиться элемент может по причине того, что к нему долго не обращались (он находится в хвосте списка) и при этом приходит новый элемент, который и вытеснит его.
+
+Реализуем операции: 
+- `addNode(node)` - добавить элемент после фиктивной головы
+- `removeNode(node)` - удалить элемент из двусвязного списка
+- `moveToHead(node)` - удалить элемент и поместить в голову списка
+- `popTail()` - удалить хвост списка (элемент перед фиктивным хвостом)
+
+```java
+public class LRUCache {
+
+    class ListNode {
+        int key;
+        int value;
+        ListNode prev;
+        ListNode next;
+    }
+    
+    private Map<Integer, ListNode> cache = new HashMap<>();
+    private ListNode head, tail;
+    private int capacity;
+```
+
+```java
+    /* add new node after head */
+    private void addNode(ListNode node) {
+        node.prev = head;
+        node.next = head.next;
+
+        head.next.prev = node;
+        head.next = node;
+    }
+    
+    /* remove an existing node from the linked list. */
+    private void removeNode(ListNode node) {
+        ListNode prev = node.prev;
+        ListNode next = node.next;
+        prev.next = next;
+        next.prev = prev;
+    }
+
+    /* Move certain node in between to the head. */
+    private void moveToHead(ListNode node){
+        removeNode(node);
+        addNode(node);
+    }
+
+    /* pop the current tail. */
+    private ListNode popTail(){
+        ListNode res = tail.prev;
+        this.removeNode(res);
+        return res;
+    }
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+
+        head = new ListNode();
+        head.prev = null;
+
+        tail = new ListNode();
+        tail.next = null;
+
+        head.next = tail;
+        tail.prev = head;
+    }
+ ```
+
+**get(key)**
+
+Ищем элемент в мапе по ключу, если его нет, то вернем -1.
+
+Если элемент найден, то возвращается его value, но при этом сам элемент помещается в голову списка, поскольку к нему только что обратились.
+
+```java
+    public int get(int key) {
+        ListNode node = cache.get(key);
+        if (node == null) {
+            return -1;
+        }
+        
+        moveToHead(node);
+        return node.value;
+    }
+```
+
+**put(key, value)**
+
+Если уже есть элемент с таким ключом, то обновим его value, а затем поместим элемент в голову, поскольку он новый.
+
+Если элемент новый, то добавляем его в cache, создаем узел списка, добавляем его в голову списка. Теперь проверяем, не был ли превышен размер кеша: если да, то удалим элемент из конца списка, а затем удалим его из кеша по ключу.
+
+```java
+    public void put(int key, int value) {
+        ListNode node = cache.get(key);
+
+        if (node == null) {
+            ListNode newNode = new ListNode();
+            newNode.key = key;
+            newNode.value = value;
+
+            cache.put(key, newNode);
+            addNode(newNode);
+
+            if (cache.size() > capacity) {
+                ListNode tail = popTail();
+                cache.remove(tail.key);
+            }
+        } 
+        else {
+            node.value = value;
+            moveToHead(node);
+        }
+    }
+
+}
 ```
