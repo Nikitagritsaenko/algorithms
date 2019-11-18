@@ -9,7 +9,7 @@
 - [Valid Palindrome](#valid-palindrome)
 - [Is Subsequence](#is-subsequence)
 - [Longest Palindromic Substring](#longest-palindromic-substring)
-- [](#)
+- [Palindromic Substrings](#palindromic-substrings)
 
 ## Template for substring tasks
 
@@ -555,5 +555,39 @@ class Solution {
         }
         return right - left - 1;
     }
+}
+```
+
+## Palindromic Substrings
+https://leetcode.com/problems/palindromic-substrings
+
+Найти в строке число подстрок-палиндромов.
+
+### Решение
+
+Немного переделанная предыдущая задача. Стоит заметить, что счетчик палиндромов увеличивается на 1 тогда, когда можно расширить 
+старый палиндром вокруг центра и получить новый палиндром.
+
+```java
+public int countSubstrings(String s) {
+    if (s == null) return 0;
+
+    int count = 0;
+    for (int i = 0; i < s.length(); i++) {
+        count += expandAroundCenter(s, i, i);
+        count += expandAroundCenter(s, i, i + 1);
+    }
+    return count;
+}
+
+private static int expandAroundCenter(String s, int left, int right) {
+    int count = 0;
+    while (left >= 0 && right < s.length()
+            && s.charAt(left) == s.charAt(right)) {
+        count++;
+        left--;
+        right++;
+    }
+    return count;
 }
 ```
