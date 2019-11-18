@@ -521,3 +521,39 @@ https://leetcode.com/problems/longest-palindromic-substring
 В данной строке найти подстроку-палиндром наибольшей длины.
 
 ### Решение
+
+Заметим, что если есть строка-палиндром длины `n`, то легко проверить на палиндромность строку длины `n+2`, когда получается расширением
+предыдущей слева и справа относительно центра. Таких центров может быть `2n-1`. Всё дело в том, что центр может находиться как на самой букве (таких центров `n`), так и между буквами (таких `n-1`).
+
+`expandAroundCenter` принимает на вход центр и говорит, какой длины максимальная подстрока-палиндром вокруг этого центра.
+
+В цикле проходим по `n` буквам, на каждой итерации проверяем 2 центра. В переменных `start` и `end` храним границы максимальной подстроки-палиндрома, чтобы потом можно было её извлечь из исходной подстроки. Если размер новой подстроки-палиндрома больше, чем у предыдущей, то обновляем значения переменных `start` и `end`. 
+
+```java
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) 
+            return "";
+
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expandAroundCenter(s, i, i);
+            int len2 = expandAroundCenter(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > end - start + 1) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+
+    private int expandAroundCenter(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
+}
+```
