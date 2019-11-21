@@ -1,6 +1,18 @@
 # Trees
 
 - [Maximum Depth of Binary Tree](#maximum-depth-of-binary-tree)
+- [Symmetric Tree](#symmetric-tree)
+- [](#)
+- [](#)
+- [](#)
+- [](#)
+- [](#)
+- [](#)
+- [](#)
+- [](#)
+- [](#)
+- [](#)
+- [](#)
 - [Construct Binary Tree from Preorder and Inorder Traversal](#construct-binary-tree-from-preorder-and-inorder-traversal)
 
 ## Maximum Depth of Binary Tree
@@ -89,3 +101,64 @@ Algorithm Postorder(tree)
         return root;
     }
  ```
+
+## Symmetric Tree
+
+https://leetcode.com/problems/symmetric-tree
+
+### Рекурсивное решение
+
+```java
+class Solution {
+    public boolean compare(TreeNode a, TreeNode b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+       
+        return (a.val == b.val)
+            && compare(a.left, b.right)
+            && compare(a.right, b.left);
+    }
+    
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null)
+            return true;
+        return compare(root.left, root.right);
+    }
+}
+```
+
+### Итеративное решение
+
+В очередь добавляем элементы дерева, которые будем обходить. В цикле извлекаем 2 элемента очереди - это симметричные узлы дерева. Чтобы очередь имела такую структуру, кладем на каждой итерации новые 4 элемента: a.left, b.right, a.right, b.left
+
+```java
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null)
+            return true;
+        
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        q.add(root);
+        
+        while (!q.isEmpty()) {
+            TreeNode a = q.poll();
+            TreeNode b = q.poll();
+            
+            if (a == null && b == null) 
+                continue;
+            if (a == null || b == null) 
+                return false;
+            if (a.val != b.val) 
+                return false;
+            
+            q.add(a.left);
+            q.add(b.right);
+            q.add(a.right);
+            q.add(b.left);
+        }
+        
+        return true;   
+    }
+}
+```
