@@ -2,7 +2,7 @@
 
 - [Maximum Depth of Binary Tree](#maximum-depth-of-binary-tree)
 - [Symmetric Tree](#symmetric-tree)
-- [](#)
+- [Same Tree](#same-tree)
 - [](#)
 - [](#)
 - [](#)
@@ -160,5 +160,48 @@ class Solution {
         
         return true;   
     }
+}
+```
+
+## Same tree
+https://leetcode.com/problems/same-tree/
+
+Проверить, равны ли 2 дерева.
+
+### Итеративное решение
+Используем 2 очереди - для каждого дерева. Достаем из каждой очереди по одному элементу и сверяем их. Кладём в каждую очередь еще по 2 узла дерева (левый и правый ребенок узла дерева, который достали). Когда одна из очередей стала пуста, в одном из деревьев больше нет элементов, нет смысла сравнивать дальше. Если пусты обе очереди, то значит, что деревья равны. Если нет, то одно дерево было поддеревом другого и деревья не равны.
+
+```java
+class Solution {
+class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        Queue<TreeNode> q1 = new LinkedList<>();
+        Queue<TreeNode> q2 = new LinkedList<>();
+        q1.add(p);
+        q2.add(q);
+        
+        while (!q1.isEmpty() && !q2.isEmpty()) {
+            TreeNode a = q1.poll();
+            TreeNode b = q2.poll();
+            
+            if (a == null && b == null) 
+                continue;
+            if (a == null || b == null) 
+                return false;
+            if (a.val != b.val)
+                return false;
+            
+            q1.add(a.left);
+            q1.add(a.right);
+            q2.add(b.left);
+            q2.add(b.right);
+        }
+        
+        if (!q1.isEmpty() || !q2.isEmpty())
+            return false;
+        
+        return true;
+    }
+}
 }
 ```
