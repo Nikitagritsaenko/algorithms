@@ -173,7 +173,6 @@ https://leetcode.com/problems/same-tree/
 
 ```java
 class Solution {
-class Solution {
     public boolean isSameTree(TreeNode p, TreeNode q) {
         Queue<TreeNode> q1 = new LinkedList<>();
         Queue<TreeNode> q2 = new LinkedList<>();
@@ -202,6 +201,5 @@ class Solution {
         
         return true;
     }
-}
 }
 ```
