@@ -247,19 +247,14 @@ class Solution {
 
 ```java
 class Solution {
-    public boolean helper(TreeNode root, Integer sum) {
-        if (root == null)
-            return false;
-        
-        return (sum - root.val == 0 && root.left == null && root.right == null)
-            || helper(root.left, sum - root.val) 
-            || helper(root.right, sum - root.val);
-    }
     
     public boolean hasPathSum(TreeNode root, int sum) {
         if (root == null)
             return false;
-        return helper(root, sum);
+        
+        return (sum - root.val == 0 && root.left == null && root.right == null)
+            || hasPathSum(root.left, sum - root.val) 
+            || hasPathSum(root.right, sum - root.val);
     }
 }
 ```
