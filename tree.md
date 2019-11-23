@@ -3,7 +3,7 @@
 - [Maximum Depth of Binary Tree](#maximum-depth-of-binary-tree)
 - [Symmetric Tree](#symmetric-tree)
 - [Same Tree](#same-tree)
-- [](#)
+- [Path Sum](#path-sum)
 - [](#)
 - [](#)
 - [](#)
@@ -200,6 +200,46 @@ class Solution {
             return false;
         
         return true;
+    }
+}
+```
+
+## PathSum
+https://leetcode.com/problems/path-sum
+
+Проверить, есть ли в дереве `root` пусть от корня до листа, такой, что сумма всех элементов пути равна `sum`.
+
+### Итеративное решение
+Обходим в дерево с помощью очереди. Каждый элемент очереди содержит пару `<TreeNode, Integer>`, где ключом является элемент дерева, а
+значением - сумма пути до этого элемента. Вытаскиваем элемент из очереди. Если он листовой (то есть оба ребенка `null`) и его сумма равна искомой, то тогда путь найден, вернём true. Если обошли всё дерево, а пути не нашли, то возвращаем false.
+
+```java
+import javafx.util.Pair; 
+
+class Solution {
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if (root == null)
+            return false;
+        
+        Queue<Pair<TreeNode, Integer>> q = new LinkedList<>();
+        q.add(new Pair<>(root, root.val));
+        
+        while (!q.isEmpty()) {
+            Pair<TreeNode, Integer> p = q.poll();
+            TreeNode node = p.getKey();
+            Integer s = p.getValue();
+      
+            if (node.left == null && node.right == null && s == sum)
+                return true;  
+            
+            if (node.left != null)
+                q.add(new Pair<TreeNode, Integer>(node.left, s + node.left.val));
+            
+            if (node.right != null)
+                q.add(new Pair<TreeNode, Integer>(node.right, s + node.right.val));
+        }
+        
+        return false;   
     }
 }
 ```
