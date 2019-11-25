@@ -4,7 +4,7 @@
 - [Symmetric Tree](#symmetric-tree)
 - [Same Tree](#same-tree)
 - [Path Sum](#path-sum)
-- [](#)
+- [Subtree of Another Tree](#subtree-of-another-tree)
 - [](#)
 - [](#)
 - [](#)
@@ -256,5 +256,65 @@ class Solution {
             || hasPathSum(root.left, sum - root.val) 
             || hasPathSum(root.right, sum - root.val);
     }
+}
+```
+## Subtree of Another Tree
+https://leetcode.com/problems/subtree-of-another-tree
+
+Узнать, является ли дерево `t` поддеревом дерева `s`.
+
+### Решение 1 - preorder traversal
+
+Оба дерева можно пройти с помощью preorder traversal, записать результат прохода в строку. Очевидно, что если строка второго дерева является подстрокой первого дерева, то и второе дерево есть поддерево первого. Вхождение можно проверить с помощью функции `indexOf`.
+
+![](https://leetcode.com/problems/subtree-of-another-tree/Figures/572_Subtree_1.PNG)
+
+
+```java
+class Solution {
+    HashSet <String> trees = new HashSet<>();
+
+    public String preorder(TreeNode t, boolean left) {
+        if (t == null) {
+            if (left)
+                return "null";
+            else
+                return "null";
+        }
+        return "#" + t.val + " " + preorder(t.left, true) + " " + preorder(t.right, false);
+    }
+    
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        String tree1 = preorder(s, true);
+        String tree2 = preorder(t, true);
+        return tree1.indexOf(tree2) >= 0;
+    }
+ 
+}
+```
+
+### Решение 2 - проверить поддерево каждого узла
+
+Рекурсивно для каждого узла проверяем, совпадает ли его поддерево с искомым. Заметим, что рекурсия развернется в выражение вида
+equals(s,t) || equals(s.left,t) || ... || equals(s.right,t). Так что если хотя бы одно совпадение найдено, то вернется true.
+
+```java
+public class Solution {
+    public boolean equals(TreeNode x, TreeNode y) {
+        if (x == null && y == null) return true;
+        
+        if (x == null || y == null) return false;
+        
+        return x.val == y.val && equals(x.left, y.left) && equals(x.right, y.right);
+    }
+      
+    public boolean traverse(TreeNode s, TreeNode t) {
+        return s != null && (equals(s,t) || traverse(s.left, t) || traverse(s.right, t));
+    }
+    
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        return traverse(s,t);
+    }
+   
 }
 ```
