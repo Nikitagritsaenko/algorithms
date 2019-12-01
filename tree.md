@@ -6,8 +6,8 @@
 - [Path Sum](#path-sum)
 - [Subtree of Another Tree](#subtree-of-another-tree)
 - [Binary Tree Inorder Traversal](#binary-tree-inorder-traversal)
-- [](#)
-- [](#)
+- [Validate Binary Search Tree](#validate-binary-search-tree)
+- [Binary Tree Level Order Traversal](#binary-tree-level-order-traversal)
 - [](#)
 - [](#)
 - [](#)
@@ -382,4 +382,75 @@ class Solution {
         return list;
     }
 }
+```
+## Validate Binary Search Tree
+https://leetcode.com/problems/validate-binary-search-tree
+
+### Рекурсивное решение
+Используем вспомогательную функцию, в которую передаем текущий узел дерева, а также допустимые границы значения этого узла. Для корня 
+границы (null, null), поскольку он может быть любым. Далее идем налево/направо и меняем соответственно правую/левую допустимую границу. Если значение узла вне допустимой границы, то вернем false. Если все узлы проверены и false не вернули, то вернем true.
+
+```java
+class Solution {
+    public boolean helper(TreeNode node, Integer lower, Integer upper) {
+        if (node == null) return true;
+
+        if (lower != null && node.val <= lower) return false;
+        if (upper != null && node.val >= upper) return false;
+
+        if (!helper(node.right, node.val, upper)) return false;
+        if (!helper(node.left, lower, node.val))  return false;
+        
+        return true;
+    }
+
+    public boolean isValidBST(TreeNode root) {
+        return helper(root, null, null);
+    }
+}
+```
+### Итеративное решение
+
+Используем inorder обход. Заметим, что для валидного дерева все элементы в обходе будут расположены в порядке возрастания. Остаётся только проверить условие `(prev >= curr.val)`, где `prev` - последний элемент обхода, а `curr.val` - новый элемент. Если оно выполняется, то дерево невалидное.
+
+```java
+class Solution {
+    
+    public boolean isValidBST(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        if (root == null)
+            return true;
+        
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
+        while (curr != null || !stack.isEmpty()) {
+            while (curr != null) {
+                stack.push(curr);
+                curr = curr.left;
+            }
+            curr = stack.pop();
+            
+            if (list.size() != 0) {
+                int prev = list.get(list.size() - 1);
+                if (prev >= curr.val)
+                    return false;
+            }
+            list.add(curr.val);
+            
+            curr = curr.right;
+        }
+        
+        return true;
+    }
+}
+```
+
+## Binary Tree Level Order Traversal
+https://leetcode.com/problems/binary-tree-level-order-traversal/
+
+### Рекурсивное решение
+```java
+```
+### Итеративное решение
+```java
 ```
