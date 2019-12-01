@@ -5,7 +5,7 @@
 - [Same Tree](#same-tree)
 - [Path Sum](#path-sum)
 - [Subtree of Another Tree](#subtree-of-another-tree)
-- [](#)
+- [Binary Tree Inorder Traversal](#binary-tree-inorder-traversal)
 - [](#)
 - [](#)
 - [](#)
@@ -14,6 +14,25 @@
 - [](#)
 - [](#)
 - [Construct Binary Tree from Preorder and Inorder Traversal](#construct-binary-tree-from-preorder-and-inorder-traversal)
+
+## Памятка по обходам дерева
+
+Algorithm Inorder(tree)
+   1. Traverse the left subtree, i.e., call Inorder(left-subtree)
+   2. Visit the root.
+   3. Traverse the right subtree, i.e., call Inorder(right-subtree)
+   
+Algorithm Preorder(tree)
+   1. Visit the root.
+   2. Traverse the left subtree, i.e., call Preorder(left-subtree)
+   3. Traverse the right subtree, i.e., call Preorder(right-subtree) 
+   
+Algorithm Postorder(tree)
+   1. Traverse the left subtree, i.e., call Postorder(left-subtree)
+   2. Traverse the right subtree, i.e., call Postorder(right-subtree)
+   3. Visit the root.
+   
+![](https://media.geeksforgeeks.org/wp-content/cdn-uploads/Preorder-from-Inorder-and-Postorder-traversals.jpg)
 
 ## Maximum Depth of Binary Tree
 https://leetcode.com/problems/maximum-depth-of-binary-tree/
@@ -41,20 +60,6 @@ Return the following binary tree:
     /  \
    15   7
 ```   
-Algorithm Inorder(tree)
-   1. Traverse the left subtree, i.e., call Inorder(left-subtree)
-   2. Visit the root.
-   3. Traverse the right subtree, i.e., call Inorder(right-subtree)
-   
-Algorithm Preorder(tree)
-   1. Visit the root.
-   2. Traverse the left subtree, i.e., call Preorder(left-subtree)
-   3. Traverse the right subtree, i.e., call Preorder(right-subtree) 
-   
-Algorithm Postorder(tree)
-   1. Traverse the left subtree, i.e., call Postorder(left-subtree)
-   2. Traverse the right subtree, i.e., call Postorder(right-subtree)
-   3. Visit the root.
 
 ### Решение
 Идея: взять корень дерева (`preorder[0]`) и запустить для него рекурсивную процедуру построения дерева. 
@@ -316,5 +321,65 @@ public class Solution {
         return traverse(s,t);
     }
    
+}
+```
+
+## Binary Tree Inorder Traversal
+https://leetcode.com/problems/binary-tree-inorder-traversal
+
+### Рекурсивное решение
+Рекурсивная процедура идёт сначала рекурсивно влево, потом добавляет в список узел, потом идёт рекурсивно вправо. Это и есть inorder обход.
+
+```java
+class Solution {
+    public void helper(TreeNode root, List<Integer> list) {
+        if (root.left != null) {
+            helper(root.left, list);
+        }
+        list.add(root.val);
+        if (root.right != null) {
+            helper(root.right, list);
+        }
+
+    }
+    public List<Integer> inorderTraversal(TreeNode root) {  
+        List<Integer> list = new ArrayList<>();
+        if (root == null)
+            return list;
+        helper(root, list);
+        return list;
+    }
+}
+```
+
+### Итеративное решение
+Для обхода дерева используется стек и узел дерева `curr`. Рассматриваем текущий узел (`curr`). Для этого узла добавим в стек все узлы по левому пути от него. Каждый из этих узлов нужно будет посетить в порядке снизу вверх, при этом не забыв посетить правые поддеревья этих узлов. 
+
+Добавленный узел снимается со стека, его значение добавляется в список обхода, затем текущим узлом становится узел, правый от него. Для этого правого узла на следующей итерации цикла добавим в стек снова все узлы по левому пути. Так делаем до тех пор, пока не выполнится условие выхода. 
+
+Усховие выхода: стек пуст и текущий узел равен `null` (то есть стек больше нечем пополнить). Стек может пусть пустым по мере обхода, однако если узел `curr` не `null`, то стек можно снова пополнить.
+
+```java
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {  
+        List<Integer> list = new ArrayList<>();
+        if (root == null)
+            return list;
+        
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
+        while (curr != null || !stack.isEmpty()) {
+            while (curr != null) {
+                stack.push(curr);
+                curr = curr.left;
+            }
+            curr = stack.pop();
+            list.add(curr.val);
+            
+            curr = curr.right;
+        }
+        
+        return list;
+    }
 }
 ```
