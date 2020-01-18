@@ -7,12 +7,12 @@
 - [Subtree of Another Tree](#subtree-of-another-tree)
 - [Binary Tree Inorder Traversal](#binary-tree-inorder-traversal)
 - [Validate Binary Search Tree](#validate-binary-search-tree)
-- [Binary Tree Level Order Traversal](#binary-tree-level-order-traversal)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
+- TODO [Binary Tree Level Order Traversal](#binary-tree-level-order-traversal)
+- TODO [Invert Binary Tree](#invert-binary-tree)
+- TODO [Kth Smallest Element in a BST](#kth-smallest-element-in-a-bst)
+- TODO [Lowest Common Ancestor of a Binary Search Tree](#lowest-common-ancestor-of-a-binary-search-tree)
+- TODO [Lowest Common Ancestor of a Binary Tree](#lowest-common-ancestor-of-a-binary-tree)
+- TODO [Binary Search Tree Iterator](#binary-search-tree-iterator)
 - [Construct Binary Tree from Preorder and Inorder Traversal](#construct-binary-tree-from-preorder-and-inorder-traversal)
 
 ## Памятка по обходам дерева
@@ -447,6 +447,56 @@ class Solution {
 
 ## Binary Tree Level Order Traversal
 https://leetcode.com/problems/binary-tree-level-order-traversal/
+
+### Рекурсивное решение
+```java
+```
+### Итеративное решение
+```java
+```
+
+## Invert Binary Tree
+https://leetcode.com/problems/invert-binary-tree/
+
+### Рекурсивное решение
+```java
+```
+### Итеративное решение
+```java
+```
+
+## Kth Smallest Element in a BST
+https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+
+### Рекурсивное решение
+```java
+```
+### Итеративное решение
+```java
+```
+
+## Lowest Common Ancestor of a Binary Search Tree
+https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+
+### Рекурсивное решение
+```java
+```
+### Итеративное решение
+```java
+```
+
+## Lowest Common Ancestor of a Binary Tree
+https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
+
+### Рекурсивное решение
+```java
+```
+### Итеративное решение
+```java
+```
+
+## Binary Search Tree Iterator
+https://leetcode.com/problems/binary-search-tree-iterator/
 
 ### Рекурсивное решение
 ```java
