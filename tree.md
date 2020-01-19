@@ -7,7 +7,7 @@
 - [Subtree of Another Tree](#subtree-of-another-tree)
 - [Binary Tree Inorder Traversal](#binary-tree-inorder-traversal)
 - [Validate Binary Search Tree](#validate-binary-search-tree)
-- TODO [Binary Tree Level Order Traversal](#binary-tree-level-order-traversal)
+- [Binary Tree Level Order Traversal](#binary-tree-level-order-traversal)
 - TODO [Invert Binary Tree](#invert-binary-tree)
 - TODO [Kth Smallest Element in a BST](#kth-smallest-element-in-a-bst)
 - TODO [Lowest Common Ancestor of a Binary Search Tree](#lowest-common-ancestor-of-a-binary-search-tree)
@@ -448,11 +448,45 @@ class Solution {
 ## Binary Tree Level Order Traversal
 https://leetcode.com/problems/binary-tree-level-order-traversal/
 
-### Рекурсивное решение
+### Решение
+
+Обход дерева с помощью очереди. Как доставать из очереди элементы конкретного уровня?
+
+Добавим в очередь корень. Размер первого уровня - 1 элемент (сам корень). Теперь 1 раз берем элемент из очереди, добавляем в очередь детей. Таким образом, в очереди уже лежат все элементы второго уровня. Значит размер очереди - это размер второго уровня (пусть это 2). Теперь 2 раза извлекаем элементы из очереди, а их детей добавляем в эту очередь. В очереди лежат все элементы 3 уровня... И так далее, пока очередь не окажется пуста.
+
 ```java
-```
-### Итеративное решение
-```java
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        
+        Queue <TreeNode> q = new LinkedList<>();
+        q.add(root);
+        
+        while (!q.isEmpty()) {
+            int levelSize = q.size();
+            List<Integer> currLevel = new ArrayList<>();
+            
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode curr = q.remove();
+                currLevel.add(curr.val);
+                
+                if (curr.left != null) {
+                    q.add(curr.left);
+                }
+                if (curr.right != null) {
+                    q.add(curr.right);
+                }
+            }
+            
+            result.add(currLevel);
+        }
+        
+        return result;
+    }
+}
 ```
 
 ## Invert Binary Tree
