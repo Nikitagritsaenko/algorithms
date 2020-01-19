@@ -8,7 +8,7 @@
 - [Binary Tree Inorder Traversal](#binary-tree-inorder-traversal)
 - [Validate Binary Search Tree](#validate-binary-search-tree)
 - [Binary Tree Level Order Traversal](#binary-tree-level-order-traversal)
-- TODO [Invert Binary Tree](#invert-binary-tree)
+- [Invert Binary Tree](#invert-binary-tree)
 - TODO [Kth Smallest Element in a BST](#kth-smallest-element-in-a-bst)
 - TODO [Lowest Common Ancestor of a Binary Search Tree](#lowest-common-ancestor-of-a-binary-search-tree)
 - TODO [Lowest Common Ancestor of a Binary Tree](#lowest-common-ancestor-of-a-binary-tree)
@@ -492,11 +492,67 @@ class Solution {
 ## Invert Binary Tree
 https://leetcode.com/problems/invert-binary-tree/
 
+### Итеративное решение
+
+Обычный обход дерева с помощью очереди: сначала добавляем в очередь корень, а затем в цикле извлекаем узлы из очереди, а детей узлов добавляем. Здесь нужно лишь поменять детей местами, прежде чем добавить их в очередь. 
+
+```java
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+    
+        Queue <TreeNode> q = new LinkedList<>();
+        q.add(root);
+        
+        while (!q.isEmpty()) {
+            TreeNode curr = q.remove();
+            
+            TreeNode t = curr.left;
+            curr.left = curr.right;
+            curr.right = t;
+            
+            if (curr.left != null) {
+                q.add(curr.left);
+            }
+            if (curr.right != null) {
+                q.add(curr.right);
+            }       
+        }
+        
+        return root;
+    }
+}
+```
+
 ### Рекурсивное решение
 ```java
-```
-### Итеративное решение
-```java
+class Solution {
+    public TreeNode invert(TreeNode node) {
+        TreeNode t = node.left;
+        node.left = node.right;
+        node.right = t;
+        
+        if (node.left != null) {
+            invert(node.left);
+        }
+        
+        if (node.right != null) {
+            invert(node.right);
+        }
+        
+        return node;
+    }
+    
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+     
+        return invert(root);
+    }
+}
 ```
 
 ## Kth Smallest Element in a BST
