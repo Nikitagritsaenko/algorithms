@@ -559,10 +559,46 @@ class Solution {
 https://leetcode.com/problems/kth-smallest-element-in-a-bst/
 
 ### Рекурсивное решение
+В основе решения inorder обход: элементы дерева обрабатываются в порядке возрастания, так что нужно вернуть k-ый элемент списка, полученный при обходе.
+
 ```java
+class Solution {  
+    public void inOrder(TreeNode root, List<Integer> list) {
+        if (root == null) 
+            return;
+        
+        inOrder(root.left, list);
+        list.add(root.val);
+        inOrder(root.right, list);
+    }
+
+    public int kthSmallest(TreeNode root, int k) {
+        List<Integer> sorted = new ArrayList<Integer>();
+        inOrder(root, sorted);
+        return sorted.get(k - 1);
+    }
+}
 ```
+
+Идея та же, что и в рекурсивном подходе: inorder обход. Реализован он с помощью стека. Кладем на стек все элементы по левой ветке, затем снимаем со стека один элемент (и обрабатываем его так, как нам нужно!) и идём направо. Так и работает inorder обход в случае рекурсии. Обработка: уменьшить счетчик уже обработанных элементов на 1. Когда он станет равным 0, текущий обрабатываемый элемент и будет k-ым по счёту.
+
 ### Итеративное решение
 ```java
+    class Solution {  
+    public int kthSmallest(TreeNode root, int k) {
+        Deque<TreeNode> stack = new ArrayDeque<>();
+
+        while (true) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            if (--k == 0) return root.val;
+            root = root.right;
+        }
+    }
+}
 ```
 
 ## Lowest Common Ancestor of a Binary Search Tree
