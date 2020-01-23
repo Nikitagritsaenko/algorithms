@@ -12,7 +12,7 @@
 - [Kth Smallest Element in a BST](#kth-smallest-element-in-a-bst)
 - TODO [Lowest Common Ancestor of a Binary Search Tree](#lowest-common-ancestor-of-a-binary-search-tree)
 - TODO [Lowest Common Ancestor of a Binary Tree](#lowest-common-ancestor-of-a-binary-tree)
-- TODO [Binary Search Tree Iterator](#binary-search-tree-iterator)
+- [Binary Search Tree Iterator](#binary-search-tree-iterator)
 - [Construct Binary Tree from Preorder and Inorder Traversal](#construct-binary-tree-from-preorder-and-inorder-traversal)
 
 ## Памятка по обходам дерева
@@ -625,9 +625,50 @@ https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
 ## Binary Search Tree Iterator
 https://leetcode.com/problems/binary-search-tree-iterator/
 
-### Рекурсивное решение
+###  Решение 1 - преобразование дерева в список
+1. Применить inorder обход и вернуть список
+2. Итерироваться по списку
+
+###  Решение 2 - итеративный inorder обход
+
+Будем использовать стек, как и подобает итеративному inorder обходу.
+
+Будем также использовать функцию `descentLeft(TreeNode root)`, которая осуществляет левосторонний спуск по дереву.
+
+hasNext(): Итератор может двигаться дальше при непустом стеке.
+
+next(): Если верхушка стека не имеет правого ребенка, то вернем её значение. Если имеет, то перейдем направо, а потом снова спустимся по левостороннему пути, вернем самый нижний (последний) элемент. Так и работает inorder обход.
+
+
 ```java
-```
-### Итеративное решение
-```java
+class BSTIterator {
+
+    Stack<TreeNode> stack;
+
+    public BSTIterator(TreeNode root) {
+        this.stack = new Stack<TreeNode>();
+        this.descentLeft(root);
+    }
+
+    private void descentLeft(TreeNode root) {
+        while (root != null) {
+            this.stack.push(root);
+            root = root.left;
+        }
+    }
+
+    public int next() {
+        TreeNode nextMin = this.stack.pop();
+
+        if (nextMin.right != null) {
+            this.descentLeft(nextMin.right);
+        }
+
+        return nextMin.val;
+    }
+
+    public boolean hasNext() {
+        return this.stack.size() > 0;
+    }
+}
 ```
