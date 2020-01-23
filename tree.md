@@ -10,8 +10,8 @@
 - [Binary Tree Level Order Traversal](#binary-tree-level-order-traversal)
 - [Invert Binary Tree](#invert-binary-tree)
 - [Kth Smallest Element in a BST](#kth-smallest-element-in-a-bst)
-- TODO [Lowest Common Ancestor of a Binary Search Tree](#lowest-common-ancestor-of-a-binary-search-tree)
-- TODO [Lowest Common Ancestor of a Binary Tree](#lowest-common-ancestor-of-a-binary-tree)
+- [Lowest Common Ancestor of a Binary Search Tree](#lowest-common-ancestor-of-a-binary-search-tree)
+- [Lowest Common Ancestor of a Binary Tree](#lowest-common-ancestor-of-a-binary-tree)
 - [Binary Search Tree Iterator](#binary-search-tree-iterator)
 - [Construct Binary Tree from Preorder and Inorder Traversal](#construct-binary-tree-from-preorder-and-inorder-traversal)
 
@@ -615,11 +615,96 @@ https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
 ## Lowest Common Ancestor of a Binary Tree
 https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
 
+Даны 2 узла дерева: `p` и `q`. Нужно найти у них ближайшего общего предка.
+
 ### Рекурсивное решение
+
+Обойдём дерево рекурсивно. Идея проста: найти в поддереве один из узлов `p`, `q`. Если один из узлов встретился и в левом поддереве, и вправом, то это значит, что текущий элемент является искомым. Почему этот предок ближайший? Потому что у предков этого предка оба узла `p`, `q` будут находиться либо в левом, либо в правом поддереве, но никак не в двух сразу.
+
+Бывает так, что ближайшим предком может быть `p` или `q`. Поэтому проверим также, является ли текущий элемент узлом `p` или `q`. Критерий того, что найден ближайший предок: выполнены хотя бы 2 условия из 3:
+
+- Узел является `p` или `q`
+- В левом поддереве есть `p` или `q`
+- В правом поддереве есть `p` или `q`
+
 ```java
+class Solution {
+
+    private TreeNode result;
+
+    public Solution() {
+        result = null;
+    }
+
+    private boolean recurseTree(TreeNode currentNode, TreeNode p, TreeNode q) {
+        if (currentNode == null) {
+            return false;
+        }
+
+        int left = recurseTree(currentNode.left, p, q) ? 1 : 0;
+        
+        int right = recurseTree(currentNode.right, p, q) ? 1 : 0;
+
+        // If the current node is one of p or q
+        int mid = (currentNode == p || currentNode == q) ? 1 : 0;
+
+
+        // If any two of the flags left, right or mid become True
+        if (mid + left + right >= 2) {
+            result = currentNode;
+        }
+
+        // Return true if any one of the three bool values is True.
+        return (mid + left + right > 0);
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        recurseTree(root, p, q);
+        return result;
+    }
+}
 ```
 ### Итеративное решение
+
+Можно сделать так: найти в дереве узлы `p` и `q`, при этом сохранив путь из корня до них. Потом двигаться по этим 2 путям в обратную сторону. Первый общий элемент при сравнении путей - ближайший общий предок.
+
+В map добавляем пары "узел-предок", до тех пор, пока оба узла `p`, `q` не окажутся ключами map. Далее от узла `p` пройдем до корня, собирая информацию о предках в Set ancestors. От узла `q` пройдем наверх до тех пор, пока не получим элемент множества ancestors. Это и будет ближайший общий предок.
+
 ```java
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        Map<TreeNode, TreeNode> map = new HashMap<>();
+        map.put(root, null);
+        stack.push(root);
+
+        while (!map.containsKey(p) || !map.containsKey(q)) {
+
+            TreeNode node = stack.pop();
+
+            if (node.left != null) {
+                map.put(node.left, node);
+                stack.push(node.left);
+            }
+            if (node.right != null) {
+                map.put(node.right, node);
+                stack.push(node.right);
+            }
+        }
+
+        Set<TreeNode> ancestors = new HashSet<>();
+
+        while (p != null) {
+            ancestors.add(p);
+            p = map.get(p);
+        }
+
+        while (!ancestors.contains(q))
+            q = map.get(q);
+        return q;
+    }
+
+}
 ```
 
 ## Binary Search Tree Iterator
