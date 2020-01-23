@@ -9,7 +9,7 @@
 - [Validate Binary Search Tree](#validate-binary-search-tree)
 - [Binary Tree Level Order Traversal](#binary-tree-level-order-traversal)
 - [Invert Binary Tree](#invert-binary-tree)
-- TODO [Kth Smallest Element in a BST](#kth-smallest-element-in-a-bst)
+- [Kth Smallest Element in a BST](#kth-smallest-element-in-a-bst)
 - TODO [Lowest Common Ancestor of a Binary Search Tree](#lowest-common-ancestor-of-a-binary-search-tree)
 - TODO [Lowest Common Ancestor of a Binary Tree](#lowest-common-ancestor-of-a-binary-tree)
 - TODO [Binary Search Tree Iterator](#binary-search-tree-iterator)
@@ -580,11 +580,12 @@ class Solution {
 }
 ```
 
+### Итеративное решение
+
 Идея та же, что и в рекурсивном подходе: inorder обход. Реализован он с помощью стека. Кладем на стек все элементы по левой ветке, затем снимаем со стека один элемент (и обрабатываем его так, как нам нужно!) и идём направо. Так и работает inorder обход в случае рекурсии. Обработка: уменьшить счетчик уже обработанных элементов на 1. Когда он станет равным 0, текущий обрабатываемый элемент и будет k-ым по счёту.
 
-### Итеративное решение
 ```java
-    class Solution {  
+class Solution {  
     public int kthSmallest(TreeNode root, int k) {
         Deque<TreeNode> stack = new ArrayDeque<>();
 
