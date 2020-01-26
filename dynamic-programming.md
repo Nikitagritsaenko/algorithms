@@ -1,7 +1,7 @@
 # Dynamic programming
 
 - [Backpack](#backpack)
-- TODO [Climbing Stairs](#climbing-stairs)
+- [Climbing Stairs](#climbing-stairs)
 - TODO [Coin Change](#coin-change)
 - TODO [Coin Change 2](#coin-change-2)
 - TODO [Longest Increasing Subsequence](#longest-increasing-subsequence)
@@ -96,9 +96,98 @@ class Main {
 ## Climbing stairs
 https://leetcode.com/problems/climbing-stairs/
 
-### Решение
+Вы поднимаетесь по лестнице. Требуется n шагов, чтобы добраться до вершины. Каждый раз вы можете подняться на 1 или 2 шага. Сколькими способами вы можете подняться на вершину?
+
+Input: 3
+Output: 3
+Explanation: There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step
+
+### Решение 1 - рекурсия с запоминанием
+
+Можно сделать обычной рекурсией, но тогда сложность по времени будет O(2^n). В этом подходе - O(n).
+
+В основе рекурсивная формула: `climbStairs(i, n) = climbStairs(i+1, n) + climbStairs(i+2, n)`. Если i будет равно n, то значит есть такой путь, значит прибавим 1 к ответу. Если n превышен, то такого пути нет, конец рекурсии. Если n не достигнут, дальше уходим в рекурсию.
 
 ```java
+public class Solution {
+    public int climbStairs(int n) {
+        int memo[] = new int[n + 1];
+        return climb_Stairs(0, n, memo);
+    }
+    public int climb_Stairs(int i, int n, int memo[]) {
+        if (i > n) {
+            return 0;
+        }
+        if (i == n) {
+            return 1;
+        }
+        if (memo[i] > 0) {
+            return memo[i];
+        }
+        memo[i] = climb_Stairs(i + 1, n, memo) + climb_Stairs(i + 2, n, memo);
+        return memo[i];
+    }
+}
+```
+
+### Решение 2 - динамическое программирование
+
+```java
+public class Solution {
+    public int climbStairs(int n) {
+        if (n == 1) {
+            return 1;
+        }
+        
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 2;
+        
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        
+        return dp[n];
+    }
+}
+```
+
+### Решение 3 - числа Фибоначчи
+
+Можно заметить, что ответ к задаче - число Фибоначчи f(n)
+
+```java
+public class Solution {
+    public int climbStairs(int n) {
+        if (n == 1) {
+            return 1;
+        }
+        
+        int a = 1;
+        int b = 2;
+        
+        for (int i = 3; i <= n; i++) {
+            b = a + b;
+            a = b - a;
+        }
+        return b;
+    }
+}
+```
+
+Можно также по формуле, но это решение менее надежное, хоть и более быстрое (степень вычисляется за логарифм). Ненадежность в том, что при большом n теряется точность.
+
+```java
+public class Solution {
+    public int climbStairs(int n) {
+        double sqrt5=Math.sqrt(5);
+        double fibn=Math.pow((1+sqrt5)/2,n+1)-Math.pow((1-sqrt5)/2,n+1);
+        return (int)(fibn/sqrt5);
+    }
+}
 ```
 
 ## Coin change
