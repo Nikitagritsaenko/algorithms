@@ -3,7 +3,7 @@
 - [Backpack](#backpack)
 - [Climbing Stairs](#climbing-stairs)
 - [Coin Change](#coin-change)
-- TODO [Coin Change 2](#coin-change-2)
+- [Coin Change 2](#coin-change-2)
 - TODO [Longest Increasing Subsequence](#longest-increasing-subsequence)
 - TODO [Longest Common Subsequence](#longest-common-subsequence)
 - TODO [Word Break](#word-break)
@@ -226,9 +226,62 @@ class Solution {
 ## Coin change 2
 https://leetcode.com/problems/coin-change-2/
 
+Предыдущая задача, но нужно посчитать количество всевозможных комбинаций монет, которые составят сумму amount.
+
 ### Решение
 
+Казалось бы, можно поменять основную формулу предыдущей задачи и получить что-то такое:
+
 ```java
+for (int i = 1; i <= amount; i++) {
+    for (int coin : coins) {
+        if (i >= coin) {
+            dp[i] += dp[i-coin];
+        }
+    }           
+}
+```
+
+Однако такое решение неверно, потому что в `dp[i]` добавляются повторяющиеся комбинации. Причина в том, что тут все монеты перебираются много раз. Нужно сделать как в подходе с рюкзаком: пусть можно использовать только 1 монету, только 1 и 2 монеты, только 1, 2, 3 и т.д. То есть надо поменять порядок в цикле. Тогда будет составлена таблица из всех возможных сумм и всех возможных количеств разрешенных монет.
+
+Основная формула была бы такая: `dp[i][j] = dp[i-1][j] + (j >= coins[i-1] ? dp[i][j-coins[i-1]] : 0)`, гду i - число разрешенных монет, j - сумма.
+
+`dp[i][j]` зависит только от `dp[i-1][j]` (количество комбинаций для этой же суммы, но когда в наборе на 1 монету меньше) и `dp[i][j-coins[i]]` (количество комбинаций для того же числа монет, но для суммы меньшей на цену новой монеты).
+
+```java
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[][] dp = new int[coins.length+1][amount+1];
+        dp[0][0] = 1;
+        
+        for (int i = 1; i <= coins.length; i++) {
+            dp[i][0] = 1;
+            for (int j = 1; j <= amount; j++) {
+                dp[i][j] = dp[i-1][j] + (j >= coins[i-1] ? dp[i][j-coins[i-1]] : 0);
+            }
+        }
+        return dp[coins.length][amount];
+    }
+}
+```
+
+Таблица может быть вырождена в одномерный массив. В формуле `dp[j] += dp[j-coin]` по сути `dp[i-1][j]` учитывается как `+=` (потому что в `dp[j-coin]` уже лежит результат для комбинаций из тех же монет, но кроме новой), а `dp[j-coin]` это и есть `dp[i][j-coins[i-1]]`.
+
+```java
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        
+        for (int coin : coins) {
+            for (int j = coin; j <= amount; j++) {
+                dp[j] += dp[j-coin];
+            }
+        }
+        
+        return dp[amount];
+    }
+}
 ```
 
 ## Longest Increasing Subsequence
