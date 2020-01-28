@@ -2,7 +2,7 @@
 
 - [Backpack](#backpack)
 - [Climbing Stairs](#climbing-stairs)
-- TODO [Coin Change](#coin-change)
+- [Coin Change](#coin-change)
 - TODO [Coin Change 2](#coin-change-2)
 - TODO [Longest Increasing Subsequence](#longest-increasing-subsequence)
 - TODO [Longest Common Subsequence](#longest-common-subsequence)
@@ -193,9 +193,34 @@ public class Solution {
 ## Coin change
 https://leetcode.com/problems/coin-change/
 
+Вам выдаются монеты разных номиналов и общая сумма денег amount. Какое минимальное число монет может составить эту сумму? Если эта сумма денег не может быть составлена какой-либо комбинацией монет, верните -1.
+
 ### Решение
 
+Заполняем массив по каждой возможной суммарной стоимости (от 0 до amount). 
+
+Ключевая формула: `dp[i] = Math.min(dp[i], dp[i-coin] + 1)`. Смотрим в массиве, можно ли дополнить сумму текущей монетой. Если да, то берем оптимальное число монет для суммы с вычетом текущей монеты + 1. При этом берется минимум по всем вычитаемым монетам.
+
+Возвращаем `dp[amount]`, т.к. это требуется в задаче. Массив инициализировался значениями `amount + 1`, комбинации из такого числа монет невозможны. Поэтому если `dp[amount] > amount`, то комбинация не найдена.
+
 ```java
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+        
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                 if (i >= coin) {
+                    dp[i] = Math.min(dp[i], dp[i-coin] + 1);
+                 }
+            }           
+        }
+        
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+}
 ```
 
 ## Coin change 2
