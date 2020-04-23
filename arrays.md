@@ -2,6 +2,7 @@
 
 - [Two Sum](#two-sum)
 - [Container With Most Water](#container-with-most-water)
+- [Count Pairs Sum](#count-pairs-sum)
 
 ## Two Sum
 https://leetcode.com/problems/two-sum/solution/
@@ -106,4 +107,36 @@ class Solution {
         return res;
     }
 }
+```
+
+## Count Pairs Sum
+
+Дан массив целых чисел A[1..N]. Найдите сумму попарных произведений всех элементов этого массива. 
+
+### Решение
+
+O(n^2): очевидно
+O(n)  : считаем квадрат суммы, вычитаем сумму квадратов, делим на 2. 
+
+```java
+static int findProductSum(int A[], int n) 
+{ 
+    // calculating array sum (a1 + a2 ... + an) 
+    int array_sum = 0; 
+    for (int i = 0; i < n; i++) 
+        array_sum = array_sum + A[i]; 
+  
+    // calcualting square of array sum 
+    // (a1 + a2 + ... + an)^2 
+    int array_sum_square = array_sum * array_sum; 
+  
+    // calcualting a1^2 + a2^2 + ... + an^2 
+    int individual_square_sum = 0; 
+    for (int i = 0; i < n; i++) 
+        individual_square_sum += A[i] * A[i]; 
+  
+    // required sum is (array_sum_square - 
+    // individual_square_sum) / 2 
+    return (array_sum_square - individual_square_sum) / 2; 
+} 
 ```
